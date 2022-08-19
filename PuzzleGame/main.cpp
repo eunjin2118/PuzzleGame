@@ -43,6 +43,18 @@ int main(void)
 			{
 				app.close();
 			}
+
+			// 마우스에 대한 interface추가
+			if (e.type == Event::MouseButtonPressed)
+			{
+				if (e.key.code == Mouse::Left)
+				{
+					// 마우스의 좌표 가져오기
+					Vector2i pos = Mouse::getPosition(app);
+					int x = pos.x / w + 1; // 1행, 1열로 맞췄으니까 1 더해주기
+					int y = pos.y / w + 1;
+				}
+			}
 		}
 
 		app.clear(Color::White);
