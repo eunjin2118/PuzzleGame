@@ -10,7 +10,7 @@ int main(void)
 	Texture t;
 	t.loadFromFile("images/15.png");
 
-	int grid[6][6] = { 0, }; //
+	int grid[6][6] = { 0, }; // 1~15 : 해당 숫자, 16 : 빈공간, 0 : 벽
 
 
 	int w = 64; // 퍼즐 하나의 폭
@@ -53,6 +53,32 @@ int main(void)
 					Vector2i pos = Mouse::getPosition(app);
 					int x = pos.x / w + 1; // 1행, 1열로 맞췄으니까 1 더해주기
 					int y = pos.y / w + 1;
+
+					// swap
+					// 밑으로 움직이기
+					int dx = 0, dy = 0;
+					if (grid[y + 1][x] == 16) {dx = 0; dy = 1;}
+					// 위로 움직이기
+					if (grid[y - 1][x] == 16) { dx = 0; dy = -1; }
+					// 오른쪽으로 움직이기
+					if (grid[y][x+1] == 16) { dx = 1; dy = 0; }
+					// 왼쪽으로 움직이기
+					if (grid[y][x - 1] == 16) { dx = -1; dy = 0; }
+					int temp = grid[y][x];
+					grid[y][x] = 16;
+					grid[y + dy][x + dx] = temp;
+
+					// 모션(애니메이션)
+					sprite[16].move(-dx * (float)w, -dy * (float)w);
+					float speed = 3.f;
+
+					for (int i = 0; i < w; i += (int)speed) 
+					{
+						sprite[temp].move(dx * speed, dy * speed);
+						app.draw(sprite[16]);
+						app.draw(sprite[temp]);
+						app.display();
+					}
 				}
 			}
 		}
